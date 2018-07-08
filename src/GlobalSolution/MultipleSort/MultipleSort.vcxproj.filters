@@ -21,7 +21,19 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SortTypes.h">
+    <ClInclude Include="BubbleSort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SortStatistics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ISortInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SortHelpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleSortBetter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -33,6 +45,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BubbleSort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SortHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BubbleSortBetter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

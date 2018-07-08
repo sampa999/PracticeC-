@@ -1,12 +1,13 @@
 #include "stdafx.h"
-#include "BubbleSort.h"
+#include "BubbleSortBetter.h"
 #include "SortHelpers.h"
 
-SortStatistics * BubbleSort::Sort(int * array, int size, bool verbose)
+SortStatistics * BubbleSortBetter::Sort(int * array, int size, bool verbose)
 {
 	SortStatistics * stats = new SortStatistics();
 
 	bool sorted = false;
+	int unsortedIndex = size - 1;
 
 	printArray(array, size, verbose);
 
@@ -14,7 +15,7 @@ SortStatistics * BubbleSort::Sort(int * array, int size, bool verbose)
 	{
 		sorted = true;
 
-		for (int i = 0; i < size - 1; i++)
+		for (int i = 0; i < unsortedIndex; i++)
 		{
 			stats->Reads += 2; // read array[i] and array[i+1]
 			if (array[i] > array[i + 1])
@@ -27,6 +28,8 @@ SortStatistics * BubbleSort::Sort(int * array, int size, bool verbose)
 				printArray(array, size, verbose);
 			}
 		}
+
+		unsortedIndex--;
 	}
 
 	return stats;
