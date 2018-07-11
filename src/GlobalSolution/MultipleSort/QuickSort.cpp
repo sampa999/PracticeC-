@@ -30,10 +30,15 @@ int QuickSort::Partition(int * array, int size, int low, int high, bool verbose,
 	int pivot = array[pivotIndex];
 	int checkIndex = low;
 
+	stats->Reads++;
+
 	while (checkIndex < pivotIndex)
 	{
+		stats->Reads++;
 		if (array[checkIndex] > pivot)
 		{
+			stats->Reads++;
+			stats->Writes += 3;
 			printArray(array, size, verbose);
 			array[pivotIndex] = array[checkIndex];
 			array[checkIndex] = array[pivotIndex-1];
