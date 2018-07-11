@@ -2,8 +2,8 @@
 
 #include "ISortInterface.h"
 
-class BubbleSortBetter : public SortInterface
+class BubbleSortBetter : public ISortInterface
 {
 public:
-	virtual SortStatistics * Sort(int * array, int size, bool verbose);
+	SortStatistics * Sort(int * array, int size, bool verbose);
 };

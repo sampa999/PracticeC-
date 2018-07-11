@@ -150,6 +150,7 @@
     <ClInclude Include="BubbleSort.h" />
     <ClInclude Include="BubbleSortBetter.h" />
     <ClInclude Include="ISortInterface.h" />
+    <ClInclude Include="QuickSort.h" />
     <ClInclude Include="SortHelpers.h" />
     <ClInclude Include="SortStatistics.h" />
     <ClInclude Include="stdafx.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="BubbleSort.cpp" />
     <ClCompile Include="BubbleSortBetter.cpp" />
     <ClCompile Include="MultipleSort.cpp" />
+    <ClCompile Include="QuickSort.cpp" />
     <ClCompile Include="SortHelpers.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

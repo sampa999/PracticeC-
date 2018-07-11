@@ -2,11 +2,9 @@
 
 #include "ISortInterface.h"
 
-class BubbleSort : public SortInterface
+class BubbleSort : public ISortInterface
 {
 public:
-	virtual SortStatistics * Sort(int * array, int size, bool verbose);
-private:
-
+	SortStatistics * Sort(int * array, int size, bool verbose);
 };
 
