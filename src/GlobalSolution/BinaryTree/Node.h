@@ -1,9 +1,9 @@
 #pragma once
 
-class Node
+struct Node
 {
-public:
 	Node * Left;
 	Node * Right;
+	int Key;
 	int Value;
 };

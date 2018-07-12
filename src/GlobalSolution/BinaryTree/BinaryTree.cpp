@@ -6,9 +6,28 @@ BinaryTree::BinaryTree()
 	head = nullptr;
 }
 
-void BinaryTree::Insert(int value)
+void BinaryTree::PrintInOrder()
+{
+	PrintInOrder(head);
+	printf("\n");
+}
+
+void BinaryTree::PrintInOrder(Node * current)
+{
+	if (current == nullptr)
+	{
+		return;
+	}
+
+	PrintInOrder(current->Left);
+	printf("%d-%d ", current->Key, current->Value);
+	PrintInOrder(current->Right);
+}
+
+void BinaryTree::Insert(int key, int value)
 {
 	Node * node = new Node();
+	node->Key = key;
 	node->Value = value;
 	node->Left = node->Right = nullptr;
 
@@ -21,7 +40,7 @@ void BinaryTree::Insert(int value)
 	Node * current = head;
 	while (true)
 	{
-		if (value < current->Value)
+		if (key < current->Key)
 		{
 			if (current->Left == nullptr)
 			{
@@ -33,7 +52,7 @@ void BinaryTree::Insert(int value)
 				current = current->Left;
 			}
 		}
-		else
+		else if (key > current->Key)
 		{
 			if (current->Right == nullptr)
 			{
@@ -44,6 +63,12 @@ void BinaryTree::Insert(int value)
 			{
 				current = current->Right;
 			}
+		}
+		else
+		{
+			// Update case
+			current->Value = value;
+			return;
 		}
 	}
 }
