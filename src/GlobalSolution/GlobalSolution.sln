@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LongestPalindrome", "Longes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LinkedList", "LinkedList\LinkedList.vcxproj", "{1D3363B3-EBF4-4EA0-80F1-7575E76BC494}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BinaryTree", "BinaryTree\BinaryTree.vcxproj", "{6A62B7D2-CA65-4907-B3D8-A3DD66C47C50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{1D3363B3-EBF4-4EA0-80F1-7575E76BC494}.Release|x64.Build.0 = Release|x64
 		{1D3363B3-EBF4-4EA0-80F1-7575E76BC494}.Release|x86.ActiveCfg = Release|Win32
 		{1D3363B3-EBF4-4EA0-80F1-7575E76BC494}.Release|x86.Build.0 = Release|Win32
+		{6A62B7D2-CA65-4907-B3D8-A3DD66C47C50}.Debug|x64.ActiveCfg = Debug|x64
+		{6A62B7D2-CA65-4907-B3D8-A3DD66C47C50}.Debug|x64.Build.0 = Debug|x64
+		{6A62B7D2-CA65-4907-B3D8-A3DD66C47C50}.Debug|x86.ActiveCfg = Debug|Win32
+		{6A62B7D2-CA65-4907-B3D8-A3DD66C47C50}.Debug|x86.Build.0 = Debug|Win32
+		{6A62B7D2-CA65-4907-B3D8-A3DD66C47C50}.Release|x64.ActiveCfg = Release|x64
+		{6A62B7D2-CA65-4907-B3D8-A3DD66C47C50}.Release|x64.Build.0 = Release|x64
+		{6A62B7D2-CA65-4907-B3D8-A3DD66C47C50}.Release|x86.ActiveCfg = Release|Win32
+		{6A62B7D2-CA65-4907-B3D8-A3DD66C47C50}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
