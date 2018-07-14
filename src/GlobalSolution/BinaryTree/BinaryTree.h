@@ -1,5 +1,6 @@
 #pragma once
 
+#include <windows.h>
 #include "Node.h"
 
 class BinaryTree
@@ -7,7 +8,8 @@ class BinaryTree
 public:
 	BinaryTree();
 
-	void Insert(int key, int value);
+	long Insert(int key, int value);
+	long Find(int key, int & value);
 	void PrintInOrder();
 
 private:

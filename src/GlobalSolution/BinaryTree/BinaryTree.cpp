@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <new>
 #include "BinaryTree.h"
 
 BinaryTree::BinaryTree()
@@ -24,28 +25,35 @@ void BinaryTree::PrintInOrder(Node * current)
 	PrintInOrder(current->Right);
 }
 
-void BinaryTree::Insert(int key, int value)
+long BinaryTree::Insert(int key, int value)
 {
-	Node * node = new Node();
+	Node * node = new (std::nothrow) Node();
+
+	if (node == nullptr)
+	{
+		return ERROR_OUTOFMEMORY;
+	}
+
 	node->Key = key;
 	node->Value = value;
-	node->Left = node->Right = nullptr;
 
 	if (head == nullptr)
 	{
 		head = node;
-		return;
+		return ERROR_SUCCESS;
 	}
 
 	Node * current = head;
+
 	while (true)
 	{
 		if (key < current->Key)
 		{
 			if (current->Left == nullptr)
 			{
+				node->Parent = current;
 				current->Left = node;
-				return;
+				return ERROR_SUCCESS;
 			}
 			else
 			{
@@ -56,8 +64,9 @@ void BinaryTree::Insert(int key, int value)
 		{
 			if (current->Right == nullptr)
 			{
+				node->Parent = current;
 				current->Right = node;
-				return;
+				return ERROR_SUCCESS;
 			}
 			else
 			{
@@ -68,7 +77,31 @@ void BinaryTree::Insert(int key, int value)
 		{
 			// Update case
 			current->Value = value;
-			return;
+			return ERROR_SUCCESS;
 		}
 	}
+}
+
+long BinaryTree::Find(int key, int & value)
+{
+	Node * current = head;
+
+	while (current != nullptr)
+	{
+		if (current->Key == key)
+		{
+			value = current->Value;
+			return ERROR_SUCCESS;
+		}
+		else if (current->Key > key)
+		{
+			current = current->Right;
+		}
+		else
+		{
+			current = current->Left;
+		}
+	}
+
+	return ERROR_NOT_FOUND;
 }
