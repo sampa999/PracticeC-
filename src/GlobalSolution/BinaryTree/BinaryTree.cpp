@@ -7,35 +7,42 @@ BinaryTree::BinaryTree()
 	head = nullptr;
 }
 
+void PrintFunc(Node * node)
+{
+	printf("%d-%d ", node->Key, node->Value);
+}
+
 void BinaryTree::PrintInOrder()
 {
-	PrintInOrder(head);
+	EvaluateInOrder(PrintFunc, head);
 	printf("\n");
 }
 
-void BinaryTree::PrintInOrder(Node * current)
+void BinaryTree::EvaluateInOrder(void(*func)(Node *))
+{
+	EvaluateInOrder(func, head);
+}
+
+void BinaryTree::EvaluateInOrder(void(*func)(Node *), Node * current)
 {
 	if (current == nullptr)
 	{
 		return;
 	}
 
-	PrintInOrder(current->Left);
-	printf("%d-%d ", current->Key, current->Value);
-	PrintInOrder(current->Right);
+	EvaluateInOrder(func, current->Left);
+	func(current);
+	EvaluateInOrder(func, current->Right);
 }
 
 long BinaryTree::Insert(int key, int value)
 {
-	Node * node = new (std::nothrow) Node();
+	Node * node = new (std::nothrow) Node(key, value);
 
 	if (node == nullptr)
 	{
 		return ERROR_OUTOFMEMORY;
 	}
-
-	node->Key = key;
-	node->Value = value;
 
 	if (head == nullptr)
 	{

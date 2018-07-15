@@ -2,10 +2,11 @@
 
 struct Node
 {
-	Node()
+	Node(int key, int value)
 	{
 		Parent = Left = Right = nullptr;
-		Key = Value = 0;
+		Key = key;
+		Value = value;
 	}
 
 	Node * Parent;
