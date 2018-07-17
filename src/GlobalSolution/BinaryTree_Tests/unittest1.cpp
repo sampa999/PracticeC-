@@ -81,5 +81,55 @@ namespace BinaryTree_Tests
 			Assert::AreEqual(101, nodeArray[2]->Value);
 		}
 
+		TEST_METHOD(DeleteFromEmptyTree)
+		{
+			BinaryTree * tree = new BinaryTree();
+
+			long returnValue = tree->Delete(3);
+
+			Assert::AreEqual(ERROR_NOT_FOUND, returnValue);
+		}
+
+		TEST_METHOD(DeleteFromOneElementTree)
+		{
+			BinaryTree * tree = new BinaryTree();
+
+			nodeIndex = 0;
+
+			tree->Insert(2, 200);
+			tree->EvaluateInOrder(&EvalFunction);
+
+			long returnValue = tree->Delete(3);
+
+			Assert::AreEqual(1, nodeIndex);
+			Assert::AreEqual(ERROR_NOT_FOUND, returnValue);
+
+			returnValue = tree->Delete(2);
+			Assert::AreEqual(ERROR_SUCCESS, returnValue);
+
+			nodeIndex = 0;
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(0, nodeIndex);
+		}
+
+		TEST_METHOD(DeleteLeafFromTwoElementTreeLeftWeighted)
+		{
+			BinaryTree * tree = new BinaryTree();
+
+			tree->Insert(2, 200);
+			tree->Insert(1, 100);
+
+			long returnValue = tree->Delete(1);
+			Assert::AreEqual(ERROR_SUCCESS, returnValue);
+
+			int value;
+			returnValue = tree->Find(1, value);
+			Assert::AreEqual(ERROR_NOT_FOUND, returnValue);
+			returnValue = tree->Find(2, value);
+			Assert::AreEqual(ERROR_SUCCESS, returnValue);
+			Assert::AreEqual(200, value);
+		}
+
 	};
 }

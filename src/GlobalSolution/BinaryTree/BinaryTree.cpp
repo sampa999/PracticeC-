@@ -35,6 +35,52 @@ void BinaryTree::EvaluateInOrder(void(*func)(Node *), Node * current)
 	EvaluateInOrder(func, current->Right);
 }
 
+Node * BinaryTree::FindNode(int key)
+{
+	Node * current = head;
+
+	while (current != nullptr)
+	{
+		if (current->Key == key)
+		{
+			return current;
+		}
+		else if (current->Key > key)
+		{
+			current = current->Left;
+		}
+		else
+		{
+			current = current->Right;
+		}
+	}
+
+	return nullptr;
+}
+
+Node * BinaryTree::InsertNode(Node * head, Node * node)
+{
+	if (head == nullptr)
+	{
+		return node;
+	}
+
+	if (node == nullptr)
+	{
+		return head;
+	}
+
+	while (head->Left != nullptr)
+	{
+		head = head->Left;
+	}
+
+	head->Left = node;
+	node->Parent = head;
+
+	return head;
+}
+
 long BinaryTree::Insert(int key, int value)
 {
 	Node * node = new (std::nothrow) Node(key, value);
@@ -91,24 +137,59 @@ long BinaryTree::Insert(int key, int value)
 
 long BinaryTree::Find(int key, int & value)
 {
-	Node * current = head;
+	Node * node = FindNode(key);
 
-	while (current != nullptr)
+	if (node != nullptr)
 	{
-		if (current->Key == key)
-		{
-			value = current->Value;
-			return ERROR_SUCCESS;
-		}
-		else if (current->Key > key)
-		{
-			current = current->Right;
-		}
-		else
-		{
-			current = current->Left;
-		}
+		value = node->Value;
+		return ERROR_SUCCESS;
 	}
 
 	return ERROR_NOT_FOUND;
+}
+
+long BinaryTree::Delete(int key)
+{
+	Node * node = FindNode(key);
+
+	if (node == nullptr)
+	{
+		return ERROR_NOT_FOUND;
+	}
+
+	node->Right = InsertNode(node->Right, node->Left);
+
+	switch (node->ChildType())
+	{
+	case ChildType::Root:
+	{
+		head = node->Right;
+		if (head != nullptr)
+		{
+			head->Parent = nullptr;
+		}
+		break;
+	}
+
+	case ChildType::Left:
+	{
+		node->Parent->Left = node->Right;
+		if (node->Right != nullptr)
+		{
+			node->Right->Parent = node->Parent;
+		}
+		break;
+	}
+
+	case ChildType::Right:
+	{
+		node->Parent->Right = node->Right;
+		if (node->Right->Parent != nullptr)
+		{
+			node->Right->Parent = node->Parent;
+		}
+	}
+	}
+
+	return ERROR_SUCCESS;
 }
