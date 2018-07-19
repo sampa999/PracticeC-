@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "..\BinaryTree\BinaryTree.h"
+#include <random>
+#include <time.h>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace BinaryTree_Tests
 {		
-	Node * nodeArray[20];
+	const int MaxNodes = 10000;
+	Node * nodeArray[10000];
 	int nodeIndex;
 
 	TEST_CLASS(Test1)
@@ -15,14 +18,12 @@ namespace BinaryTree_Tests
 		
 		TEST_METHOD(InstantiateTree)
 		{
-			BinaryTree * tree = new (std::nothrow) BinaryTree();
-
-			Assert::IsNotNull(tree);
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
 		}
 
 		TEST_METHOD(Insert)
 		{
-			BinaryTree * tree = new BinaryTree();
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
 
 			long err = tree->Insert(0, 100);
 
@@ -36,7 +37,7 @@ namespace BinaryTree_Tests
 
 		TEST_METHOD(EvaluateEmptyTree)
 		{
-			BinaryTree * tree = new BinaryTree();
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
 
 			nodeIndex = 0;
 
@@ -47,7 +48,7 @@ namespace BinaryTree_Tests
 
 		TEST_METHOD(EvaluateOneElementTree)
 		{
-			BinaryTree * tree = new BinaryTree();
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
 
 			nodeIndex = 0;
 
@@ -62,7 +63,7 @@ namespace BinaryTree_Tests
 
 		TEST_METHOD(EvaluateBalancedTree)
 		{
-			BinaryTree * tree = new BinaryTree();
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
 
 			nodeIndex = 0;
 
@@ -83,7 +84,7 @@ namespace BinaryTree_Tests
 
 		TEST_METHOD(DeleteFromEmptyTree)
 		{
-			BinaryTree * tree = new BinaryTree();
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
 
 			long returnValue = tree->Delete(3);
 
@@ -92,7 +93,7 @@ namespace BinaryTree_Tests
 
 		TEST_METHOD(DeleteFromOneElementTree)
 		{
-			BinaryTree * tree = new BinaryTree();
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
 
 			nodeIndex = 0;
 
@@ -115,7 +116,7 @@ namespace BinaryTree_Tests
 
 		TEST_METHOD(DeleteLeafFromTwoElementTreeLeftWeighted)
 		{
-			BinaryTree * tree = new BinaryTree();
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
 
 			tree->Insert(2, 200);
 			tree->Insert(1, 100);
@@ -129,6 +130,36 @@ namespace BinaryTree_Tests
 			returnValue = tree->Find(2, value);
 			Assert::AreEqual(ERROR_SUCCESS, returnValue);
 			Assert::AreEqual(200, value);
+		}
+
+		// Just run and see if it dies
+		TEST_METHOD(ChaosMonkey)
+		{
+			for (int i = 0; i < 1000; i++)
+			{
+				std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
+
+				for (int nodes = 0; nodes < MaxNodes; nodes++)
+				{
+					int key = rand() % MaxNodes;
+					int value = rand();
+
+					tree->Insert(key, value);
+
+					key = rand() % MaxNodes;
+
+					tree->Delete(key);
+				}
+
+				nodeIndex = 0;
+				tree->EvaluateInOrder(EvalFunction);
+
+				for (int j = 0; j < nodeIndex-1; j++)
+				{
+					// Make sure they are in order
+					Assert::IsTrue(nodeArray[j]->Key < nodeArray[j + 1]->Key);
+				}
+			}
 		}
 
 	};

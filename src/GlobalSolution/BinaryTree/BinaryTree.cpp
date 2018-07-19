@@ -175,6 +175,11 @@ long BinaryTree::Find(int key, int & value)
 		 3     7
 	   1      6 8
 	    2
+
+		    5
+	     3     8
+	   1      6
+	    2
 */
 long BinaryTree::Delete(int key)
 {
@@ -214,7 +219,7 @@ long BinaryTree::Delete(int key)
 	case ChildType::Right:
 	{
 		node->Parent->Right = node->Right;
-		if (node->Right->Parent != nullptr)
+		if (node->Right != nullptr)
 		{
 			node->Right->Parent = node->Parent;
 		}

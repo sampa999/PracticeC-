@@ -14,6 +14,7 @@ struct Node
 		Parent = Left = Right = nullptr;
 		Key = key;
 		Value = value;
+		DepthOfChildren = 0;
 	}
 
 	ChildType ChildType()
@@ -36,4 +37,5 @@ struct Node
 	Node * Right;
 	int Key;
 	int Value;
+	int DepthOfChildren; // 0 means no children
 };
