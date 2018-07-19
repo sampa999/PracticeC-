@@ -58,7 +58,10 @@ Node * BinaryTree::FindNode(int key)
 	return nullptr;
 }
 
-Node * BinaryTree::InsertNode(Node * head, Node * node)
+/*
+	Inserts the given node below the left most node of head.
+*/
+Node * BinaryTree::InsertNodeToLeft(Node * head, Node * node)
 {
 	if (head == nullptr)
 	{
@@ -83,7 +86,16 @@ Node * BinaryTree::InsertNode(Node * head, Node * node)
 
 long BinaryTree::Insert(int key, int value)
 {
+	bool updated;
+
+	return Insert(key, value, updated);
+}
+
+long BinaryTree::Insert(int key, int value, bool & updated)
+{
 	Node * node = new (std::nothrow) Node(key, value);
+
+	updated = false;
 
 	if (node == nullptr)
 	{
@@ -130,6 +142,8 @@ long BinaryTree::Insert(int key, int value)
 		{
 			// Update case
 			current->Value = value;
+			delete node;
+			updated = true;
 			return ERROR_SUCCESS;
 		}
 	}
@@ -148,6 +162,20 @@ long BinaryTree::Find(int key, int & value)
 	return ERROR_NOT_FOUND;
 }
 
+/*
+	Find the node with the given key
+	Take the nodes left branch, and move it to the left of the nodes right branch.
+	Set the nodes right branch parent to the nodes parent
+	Set the nodes parents child to the node
+	Example:
+		Remove 7 below by setting 8->left to 6 and 6->parent to 8 and setting 8->parent to 5 and 5->right to 8
+		Then 7 can be safely deleted since no one references it
+
+	        5
+		 3     7
+	   1      6 8
+	    2
+*/
 long BinaryTree::Delete(int key)
 {
 	Node * node = FindNode(key);
@@ -157,7 +185,9 @@ long BinaryTree::Delete(int key)
 		return ERROR_NOT_FOUND;
 	}
 
-	node->Right = InsertNode(node->Right, node->Left);
+	// Move the left node to the left of the right node.
+	// This maintains order in the tree when the node is removed.
+	node->Right = InsertNodeToLeft(node->Right, node->Left);
 
 	switch (node->ChildType())
 	{
