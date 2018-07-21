@@ -135,7 +135,7 @@ namespace BinaryTree_Tests
 		// Just run and see if it dies
 		TEST_METHOD(ChaosMonkey)
 		{
-			for (int i = 0; i < 1000; i++)
+			for (int i = 0; i < 100000; i++)
 			{
 				std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
 

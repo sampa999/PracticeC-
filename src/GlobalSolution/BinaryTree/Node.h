@@ -17,6 +17,11 @@ struct Node
 		DepthOfChildren = 0;
 	}
 
+	~Node()
+	{
+		Value = 0;
+	}
+
 	ChildType ChildType()
 	{
 		if (Parent == nullptr)
@@ -30,6 +35,33 @@ struct Node
 		}
 
 		return ChildType::Left;
+	}
+
+	void UpdateDepthOfChildren()
+	{
+		int leftDepth = 0;
+		int rightDepth = 0;
+
+		if (Left != nullptr)
+		{
+			leftDepth = Left->DepthOfChildren + 1;
+		}
+
+		if (Right != nullptr)
+		{
+			rightDepth = Right->DepthOfChildren + 1;
+		}
+
+		int newDepth = max(leftDepth, rightDepth);
+
+		if (newDepth != this->DepthOfChildren)
+		{
+			this->DepthOfChildren = newDepth;
+			if (Parent != nullptr)
+			{
+				Parent->UpdateDepthOfChildren();
+			}
+		}
 	}
 
 	Node * Parent;

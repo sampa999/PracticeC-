@@ -1,10 +1,16 @@
 #include "stdafx.h"
 #include <new>
 #include "BinaryTree.h"
+#include <memory>
 
 BinaryTree::BinaryTree()
 {
-	head = nullptr;
+	Head = nullptr;
+}
+
+BinaryTree::~BinaryTree()
+{
+	DeleteTree(Head);
 }
 
 void PrintFunc(Node * node)
@@ -14,13 +20,13 @@ void PrintFunc(Node * node)
 
 void BinaryTree::PrintInOrder()
 {
-	EvaluateInOrder(PrintFunc, head);
+	EvaluateInOrder(PrintFunc, Head);
 	printf("\n");
 }
 
 void BinaryTree::EvaluateInOrder(void(*func)(Node *))
 {
-	EvaluateInOrder(func, head);
+	EvaluateInOrder(func, Head);
 }
 
 void BinaryTree::EvaluateInOrder(void(*func)(Node *), Node * current)
@@ -37,7 +43,7 @@ void BinaryTree::EvaluateInOrder(void(*func)(Node *), Node * current)
 
 Node * BinaryTree::FindNode(int key)
 {
-	Node * current = head;
+	Node * current = Head;
 
 	while (current != nullptr)
 	{
@@ -84,6 +90,29 @@ Node * BinaryTree::InsertNodeToLeft(Node * head, Node * node)
 	return head;
 }
 
+void BinaryTree::DeleteTree(Node * node)
+{
+	if (node == nullptr)
+	{
+		return;
+	}
+
+	if (node->Left != nullptr)
+	{
+		DeleteTree(node->Left);
+		node->Left = nullptr;
+	}
+
+	if (node->Right != nullptr)
+	{
+		DeleteTree(node->Right);
+		node->Right = nullptr;
+	}
+
+	node->Parent = nullptr;
+	delete node;
+}
+
 long BinaryTree::Insert(int key, int value)
 {
 	bool updated;
@@ -102,13 +131,13 @@ long BinaryTree::Insert(int key, int value, bool & updated)
 		return ERROR_OUTOFMEMORY;
 	}
 
-	if (head == nullptr)
+	if (Head == nullptr)
 	{
-		head = node;
+		Head = node;
 		return ERROR_SUCCESS;
 	}
 
-	Node * current = head;
+	Node * current = Head;
 
 	while (true)
 	{
@@ -183,7 +212,7 @@ long BinaryTree::Find(int key, int & value)
 */
 long BinaryTree::Delete(int key)
 {
-	Node * node = FindNode(key);
+	std::unique_ptr<Node> node(FindNode(key));
 
 	if (node == nullptr)
 	{
@@ -198,10 +227,10 @@ long BinaryTree::Delete(int key)
 	{
 	case ChildType::Root:
 	{
-		head = node->Right;
-		if (head != nullptr)
+		Head = node->Right;
+		if (Head != nullptr)
 		{
-			head->Parent = nullptr;
+			Head->Parent = nullptr;
 		}
 		break;
 	}

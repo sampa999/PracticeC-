@@ -7,6 +7,7 @@ class BinaryTree
 {
 public:
 	BinaryTree();
+	~BinaryTree();
 
 	long Insert(int key, int value);
 	long Insert(int key, int value, bool & updated);
@@ -16,8 +17,9 @@ public:
 	void EvaluateInOrder(void(*f)(Node *));
 
 private:
-	Node * head;
+	Node * Head;
 	void EvaluateInOrder(void(*f)(Node *), Node * current);
 	Node * FindNode(int key);
 	Node * InsertNodeToLeft(Node * head, Node * node);
+	void DeleteTree(Node * head);
 };
