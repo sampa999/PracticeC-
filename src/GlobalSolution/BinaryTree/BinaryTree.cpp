@@ -79,13 +79,14 @@ Node * BinaryTree::InsertNodeToLeft(Node * head, Node * node)
 		return head;
 	}
 
-	while (head->Left != nullptr)
+	Node * current = head;
+	while (current->Left != nullptr)
 	{
-		head = head->Left;
+		current = current->Left;
 	}
 
-	head->Left = node;
-	node->Parent = head;
+	current->Left = node;
+	node->Parent = current;
 
 	return head;
 }
@@ -222,6 +223,7 @@ long BinaryTree::Delete(int key)
 	// Move the left node to the left of the right node.
 	// This maintains order in the tree when the node is removed.
 	node->Right = InsertNodeToLeft(node->Right, node->Left);
+	node->Left = nullptr; // It's been moved
 
 	switch (node->ChildType())
 	{

@@ -132,10 +132,145 @@ namespace BinaryTree_Tests
 			Assert::AreEqual(200, value);
 		}
 
+		/*
+		      5
+		   3     7
+		  2 4   6 8
+		*/
+		BinaryTree * CreateStandardBinaryTree()
+		{
+			BinaryTree * tree = new (std::nothrow) BinaryTree();
+
+			tree->Insert(5, 5);
+			tree->Insert(3, 3);
+			tree->Insert(7, 7);
+			tree->Insert(2, 2);
+			tree->Insert(4, 4);
+			tree->Insert(6, 6);
+			tree->Insert(8, 8);
+
+			return tree;
+		}
+
+		TEST_METHOD(DeleteRightLeaf)
+		{
+			std::unique_ptr<BinaryTree> tree(CreateStandardBinaryTree());
+
+			tree->Delete(8);
+
+			int value;
+			long err = tree->Find(2, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(3, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(4, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(5, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(6, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(7, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(8, value);
+			Assert::AreEqual(ERROR_NOT_FOUND, err);
+		}
+
+		TEST_METHOD(DeleteLeftLeaf)
+		{
+			std::unique_ptr<BinaryTree> tree(CreateStandardBinaryTree());
+
+			tree->Delete(2);
+
+			int value;
+			long err = tree->Find(2, value);
+			Assert::AreEqual(ERROR_NOT_FOUND, err);
+			err = tree->Find(3, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(4, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(5, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(6, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(7, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(8, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+		}
+
+		TEST_METHOD(DeleteRightInternal)
+		{
+			std::unique_ptr<BinaryTree> tree(CreateStandardBinaryTree());
+
+			tree->Delete(7);
+
+			int value;
+			long err = tree->Find(2, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(3, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(4, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(5, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(6, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(7, value);
+			Assert::AreEqual(ERROR_NOT_FOUND, err);
+			err = tree->Find(8, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+		}
+
+		TEST_METHOD(DeleteLeftInternal)
+		{
+			std::unique_ptr<BinaryTree> tree(CreateStandardBinaryTree());
+
+			tree->Delete(3);
+
+			int value;
+			long err = tree->Find(2, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(3, value);
+			Assert::AreEqual(ERROR_NOT_FOUND, err);
+			err = tree->Find(4, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(5, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(6, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(7, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(8, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+		}
+
+		TEST_METHOD(DeleteHead)
+		{
+			std::unique_ptr<BinaryTree> tree(CreateStandardBinaryTree());
+
+			tree->Delete(5);
+
+			int value;
+			long err = tree->Find(2, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(3, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(4, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(5, value);
+			Assert::AreEqual(ERROR_NOT_FOUND, err);
+			err = tree->Find(6, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(7, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+			err = tree->Find(8, value);
+			Assert::AreEqual(ERROR_SUCCESS, err);
+		}
+
 		// Just run and see if it dies
 		TEST_METHOD(ChaosMonkey)
 		{
-			for (int i = 0; i < 100000; i++)
+			for (int i = 0; i < 1000; i++)
 			{
 				std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
 
