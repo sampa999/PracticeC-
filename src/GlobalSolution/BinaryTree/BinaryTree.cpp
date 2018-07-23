@@ -148,6 +148,7 @@ long BinaryTree::Insert(int key, int value, bool & updated)
 			{
 				node->Parent = current;
 				current->Left = node;
+				current->UpdateDepthOfChildren();
 				return ERROR_SUCCESS;
 			}
 			else
@@ -161,6 +162,7 @@ long BinaryTree::Insert(int key, int value, bool & updated)
 			{
 				node->Parent = current;
 				current->Right = node;
+				current->UpdateDepthOfChildren();
 				return ERROR_SUCCESS;
 			}
 			else

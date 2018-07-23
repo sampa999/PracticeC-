@@ -82,6 +82,60 @@ namespace BinaryTree_Tests
 			Assert::AreEqual(101, nodeArray[2]->Value);
 		}
 
+		TEST_METHOD(CheckDepthOfChildrenBalancedTree)
+		{
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
+
+			nodeIndex = 0;
+
+			tree->Insert(10, 100);
+			tree->Insert(9, 99);
+			tree->Insert(11, 101);
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(3, nodeIndex);
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
+		}
+
+		TEST_METHOD(CheckDepthOfChildrenAfterOneSideDeleted)
+		{
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
+
+			nodeIndex = 0;
+
+			tree->Insert(10, 100);
+			tree->Insert(9, 99);
+			tree->Insert(11, 101);
+			tree->Delete(9);
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(2, nodeIndex);
+			Assert::AreEqual(1, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[1]->DepthOfChildren);
+		}
+
+		TEST_METHOD(CheckDepthOfChildrenAfterTwoSideDeleted)
+		{
+			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
+
+			nodeIndex = 0;
+
+			tree->Insert(10, 100);
+			tree->Insert(9, 99);
+			tree->Insert(11, 101);
+			tree->Delete(9);
+			tree->Delete(11);
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(1, nodeIndex);
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+		}
+
 		TEST_METHOD(DeleteFromEmptyTree)
 		{
 			std::unique_ptr<BinaryTree> tree(new (std::nothrow) BinaryTree());
