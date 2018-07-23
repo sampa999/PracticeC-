@@ -235,6 +235,7 @@ long BinaryTree::Delete(int key)
 		if (Head != nullptr)
 		{
 			Head->Parent = nullptr;
+			Head->UpdateDepthOfChildren();
 		}
 		break;
 	}
@@ -246,6 +247,7 @@ long BinaryTree::Delete(int key)
 		{
 			node->Right->Parent = node->Parent;
 		}
+		node->Parent->UpdateDepthOfChildren();
 		break;
 	}
 
@@ -256,6 +258,7 @@ long BinaryTree::Delete(int key)
 		{
 			node->Right->Parent = node->Parent;
 		}
+		node->Parent->UpdateDepthOfChildren();
 	}
 	}
 
