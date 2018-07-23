@@ -2,35 +2,17 @@
 #include "Node.h"
 #include <algorithm>
 
-void Node::UpdateParentNodeDistances()
-{
-	int left = 0;
-	int right = 0;
-
-	if (this->Left != nullptr)
-	{
-		left = this->Left->DistanceFromLeaf + 1;
-	}
-
-	if (this->Right != nullptr)
-	{
-		right = this->Right->DistanceFromLeaf + 1;
-	}
-
-	this->DistanceFromLeaf = std::max(left, right);
-
-	if (this->Parent != nullptr)
-	{
-		Parent->UpdateParentNodeDistances();
-	}
-}
-
 Node::Node(int key, int value)
 {
 	Parent = Left = Right = nullptr;
 	Key = key;
 	Value = value;
-	DistanceFromLeaf = 0;
+	DepthOfChildren = 0;
+}
+
+Node::~Node()
+{
+	Value = 0;
 }
 
 ChildType Node::ChildType()
@@ -48,14 +30,30 @@ ChildType Node::ChildType()
 	return ChildType::Left;
 }
 
-int Node::GetKey()
+void Node::UpdateDepthOfChildren()
 {
-	return this->Key;
+	int leftDepth = 0;
+	int rightDepth = 0;
+
+	if (Left != nullptr)
+	{
+		leftDepth = Left->DepthOfChildren + 1;
+	}
+
+	if (Right != nullptr)
+	{
+		rightDepth = Right->DepthOfChildren + 1;
+	}
+
+	int newDepth = std::max(leftDepth, rightDepth);
+
+	if (newDepth != this->DepthOfChildren)
+	{
+		this->DepthOfChildren = newDepth;
+
+		if (Parent != nullptr)
+		{
+			Parent->UpdateDepthOfChildren();
+		}
+	}
 }
-
-int Node::GetValue()
-{
-	return this->Value;
-}
-
-

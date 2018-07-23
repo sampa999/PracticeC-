@@ -57,8 +57,8 @@ namespace BinaryTree_Tests
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Assert::AreEqual(1, nodeIndex);
-			Assert::AreEqual(0, nodeArray[0]->Key);
-			Assert::AreEqual(100, nodeArray[0]->Value);
+			Assert::AreEqual(0, nodeArray[0]->get_Key());
+			Assert::AreEqual(100, nodeArray[0]->get_Value());
 		}
 
 		TEST_METHOD(EvaluateBalancedTree)
@@ -74,12 +74,12 @@ namespace BinaryTree_Tests
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Assert::AreEqual(3, nodeIndex);
-			Assert::AreEqual(9, nodeArray[0]->Key);
-			Assert::AreEqual(99, nodeArray[0]->Value);
-			Assert::AreEqual(10, nodeArray[1]->Key);
-			Assert::AreEqual(100, nodeArray[1]->Value);
-			Assert::AreEqual(11, nodeArray[2]->Key);
-			Assert::AreEqual(101, nodeArray[2]->Value);
+			Assert::AreEqual(9, nodeArray[0]->get_Key());
+			Assert::AreEqual(99, nodeArray[0]->get_Value());
+			Assert::AreEqual(10, nodeArray[1]->get_Key());
+			Assert::AreEqual(100, nodeArray[1]->get_Value());
+			Assert::AreEqual(11, nodeArray[2]->get_Key());
+			Assert::AreEqual(101, nodeArray[2]->get_Value());
 		}
 
 		TEST_METHOD(CheckDepthOfChildrenBalancedTree)
@@ -95,9 +95,9 @@ namespace BinaryTree_Tests
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Assert::AreEqual(3, nodeIndex);
-			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
-			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
-			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[0]->get_DepthOfChildren());
+			Assert::AreEqual(1, nodeArray[1]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[2]->get_DepthOfChildren());
 		}
 
 		TEST_METHOD(CheckDepthOfChildrenAfterOneSideDeleted)
@@ -114,8 +114,8 @@ namespace BinaryTree_Tests
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Assert::AreEqual(2, nodeIndex);
-			Assert::AreEqual(1, nodeArray[0]->DepthOfChildren);
-			Assert::AreEqual(0, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[0]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[1]->get_DepthOfChildren());
 		}
 
 		TEST_METHOD(CheckDepthOfChildrenAfterTwoSideDeleted)
@@ -133,7 +133,7 @@ namespace BinaryTree_Tests
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Assert::AreEqual(1, nodeIndex);
-			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[0]->get_DepthOfChildren());
 		}
 
 		TEST_METHOD(DeleteFromEmptyTree)
@@ -214,24 +214,24 @@ namespace BinaryTree_Tests
 		{
 			Assert::AreEqual(15, nodeIndex);
 
-			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
-			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
-			Assert::AreEqual(0, nodeArray[4]->DepthOfChildren);
-			Assert::AreEqual(0, nodeArray[6]->DepthOfChildren);
-			Assert::AreEqual(0, nodeArray[8]->DepthOfChildren);
-			Assert::AreEqual(0, nodeArray[0xA]->DepthOfChildren);
-			Assert::AreEqual(0, nodeArray[0xC]->DepthOfChildren);
-			Assert::AreEqual(0, nodeArray[0xE]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[0]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[2]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[4]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[6]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[8]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[0xA]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[0xC]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[0xE]->get_DepthOfChildren());
 
-			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
-			Assert::AreEqual(1, nodeArray[5]->DepthOfChildren);
-			Assert::AreEqual(1, nodeArray[9]->DepthOfChildren);
-			Assert::AreEqual(1, nodeArray[0xD]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[1]->get_DepthOfChildren());
+			Assert::AreEqual(1, nodeArray[5]->get_DepthOfChildren());
+			Assert::AreEqual(1, nodeArray[9]->get_DepthOfChildren());
+			Assert::AreEqual(1, nodeArray[0xD]->get_DepthOfChildren());
 
-			Assert::AreEqual(2, nodeArray[3]->DepthOfChildren);
-			Assert::AreEqual(2, nodeArray[0xB]->DepthOfChildren);
+			Assert::AreEqual(2, nodeArray[3]->get_DepthOfChildren());
+			Assert::AreEqual(2, nodeArray[0xB]->get_DepthOfChildren());
 
-			Assert::AreEqual(3, nodeArray[7]->DepthOfChildren);
+			Assert::AreEqual(3, nodeArray[7]->get_DepthOfChildren());
 		}
 
 		/*
@@ -431,7 +431,7 @@ namespace BinaryTree_Tests
 				for (int j = 0; j < nodeIndex-1; j++)
 				{
 					// Make sure they are in order
-					Assert::IsTrue(nodeArray[j]->Key < nodeArray[j + 1]->Key);
+					Assert::IsTrue(nodeArray[j]->get_Key() < nodeArray[j + 1]->get_Key());
 				}
 			}
 		}

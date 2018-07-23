@@ -15,7 +15,7 @@ BinaryTree::~BinaryTree()
 
 void PrintFunc(Node * node)
 {
-	printf("%d-%d ", node->Key, node->Value);
+	printf("%d-%d ", node->get_Key(), node->get_Value());
 }
 
 void BinaryTree::PrintInOrder()

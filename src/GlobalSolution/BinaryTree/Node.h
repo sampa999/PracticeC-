@@ -7,63 +7,23 @@ enum ChildType
 	Right
 };
 
-struct Node
+class Node
 {
-	Node(int key, int value)
-	{
-		Parent = Left = Right = nullptr;
-		Key = key;
-		Value = value;
-		DepthOfChildren = 0;
-	}
+	friend class BinaryTree;
+public:
+	Node(int key, int value);
 
-	~Node()
-	{
-		Value = 0;
-	}
+	~Node();
 
-	ChildType ChildType()
-	{
-		if (Parent == nullptr)
-		{
-			return ChildType::Root;
-		}
+	ChildType ChildType();
 
-		if (Parent->Right == this)
-		{
-			return ChildType::Right;
-		}
+	void UpdateDepthOfChildren();
 
-		return ChildType::Left;
-	}
+	int get_Key() { return Key; }
+	int get_Value() { return Value; }
+	int get_DepthOfChildren() { return DepthOfChildren; }
 
-	void UpdateDepthOfChildren()
-	{
-		int leftDepth = 0;
-		int rightDepth = 0;
-
-		if (Left != nullptr)
-		{
-			leftDepth = Left->DepthOfChildren + 1;
-		}
-
-		if (Right != nullptr)
-		{
-			rightDepth = Right->DepthOfChildren + 1;
-		}
-
-		int newDepth = max(leftDepth, rightDepth);
-
-		if (newDepth != this->DepthOfChildren)
-		{
-			this->DepthOfChildren = newDepth;
-			if (Parent != nullptr)
-			{
-				Parent->UpdateDepthOfChildren();
-			}
-		}
-	}
-
+private:
 	Node * Parent;
 	Node * Left;
 	Node * Right;
