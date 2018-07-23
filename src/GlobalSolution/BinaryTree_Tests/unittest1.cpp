@@ -186,6 +186,18 @@ namespace BinaryTree_Tests
 			Assert::AreEqual(200, value);
 		}
 
+		BinaryTree * CreateTree(int * node, int nodeCount)
+		{
+			BinaryTree * tree = new (std::nothrow) BinaryTree();
+
+			for (int i = 0; i < nodeCount; i++)
+			{
+				tree->Insert(node[i], i);
+			}
+
+			return tree;
+		}
+
 		/*
 		      5
 		   3     7
@@ -193,17 +205,90 @@ namespace BinaryTree_Tests
 		*/
 		BinaryTree * CreateStandardBinaryTree()
 		{
-			BinaryTree * tree = new (std::nothrow) BinaryTree();
+			int keys[7] = { 5,3,7,2,4,6,8 };
 
-			tree->Insert(5, 5);
-			tree->Insert(3, 3);
-			tree->Insert(7, 7);
-			tree->Insert(2, 2);
-			tree->Insert(4, 4);
-			tree->Insert(6, 6);
-			tree->Insert(8, 8);
+			return CreateTree(keys, 7);
+		}
 
-			return tree;
+		void Verify15TreeIsCorrect()
+		{
+			Assert::AreEqual(15, nodeIndex);
+
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[4]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[6]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[8]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[0xA]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[0xC]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[0xE]->DepthOfChildren);
+
+			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[5]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[9]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[0xD]->DepthOfChildren);
+
+			Assert::AreEqual(2, nodeArray[3]->DepthOfChildren);
+			Assert::AreEqual(2, nodeArray[0xB]->DepthOfChildren);
+
+			Assert::AreEqual(3, nodeArray[7]->DepthOfChildren);
+		}
+
+		/*
+		Insert in order from root. i.e. insert 7, then 3B, then 159D, then 02468ACE
+		This insures it is always balanced and never has to adjust
+                    7
+              3           B
+          1      5     9     D
+         0 2    4 6   8 A   C E
+		*/
+		TEST_METHOD(CheckDepthOfChildrenOnBalancedInsert)
+		{
+			int nodeKeys[15] = { 7, 3, 0xB, 1, 5, 9, 0xD, 0, 2, 4, 6, 8, 0xA, 0xC, 0xE };
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 15));
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Verify15TreeIsCorrect();
+		}
+
+		/*
+		Insert in key order. i.e. 0123456789ABCDE
+		This insures it has to adjust the maximum number of times.
+                    7
+              3           B
+          1      5     9     D
+         0 2    4 6   8 A   C E
+		*/
+		TEST_METHOD(CheckDepthOfChildrenOnKeyOrderInsert)
+		{
+			int nodeKeys[15] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xE };
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 15));
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Verify15TreeIsCorrect();
+		}
+
+		/*
+		Insert in reverse key order. i.e. EDCBA9876543210
+		This insures it has to adjust the maximum number of times.
+                    7
+              3           B
+          1      5     9     D
+         0 2    4 6   8 A   C E
+		*/
+		TEST_METHOD(CheckDepthOfChildrenOnReverseKeyOrderInsert)
+		{
+			int nodeKeys[15] = { 0xE, 0xD, 0xC, 0xB, 0xA, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 15));
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Verify15TreeIsCorrect();
 		}
 
 		TEST_METHOD(DeleteRightLeaf)
