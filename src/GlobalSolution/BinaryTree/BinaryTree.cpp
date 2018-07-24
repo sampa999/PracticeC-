@@ -10,35 +10,19 @@ BinaryTree::BinaryTree()
 
 BinaryTree::~BinaryTree()
 {
-	DeleteTree(Head);
-}
-
-void PrintFunc(Node * node)
-{
-	printf("%d-%d ", node->get_Key(), node->get_Value());
-}
-
-void BinaryTree::PrintInOrder()
-{
-	EvaluateInOrder(PrintFunc, Head);
-	printf("\n");
+	if (Head != nullptr)
+	{
+		Head->DeleteTree();
+		Head = nullptr;
+	}
 }
 
 void BinaryTree::EvaluateInOrder(void(*func)(Node *))
 {
-	EvaluateInOrder(func, Head);
-}
-
-void BinaryTree::EvaluateInOrder(void(*func)(Node *), Node * current)
-{
-	if (current == nullptr)
+	if (Head != nullptr)
 	{
-		return;
+		Head->EvaluateInOrder(func);
 	}
-
-	EvaluateInOrder(func, current->Left);
-	func(current);
-	EvaluateInOrder(func, current->Right);
 }
 
 Node * BinaryTree::FindNode(int key)
@@ -89,29 +73,6 @@ Node * BinaryTree::InsertNodeToLeft(Node * head, Node * node)
 	node->Parent = current;
 
 	return head;
-}
-
-void BinaryTree::DeleteTree(Node * node)
-{
-	if (node == nullptr)
-	{
-		return;
-	}
-
-	if (node->Left != nullptr)
-	{
-		DeleteTree(node->Left);
-		node->Left = nullptr;
-	}
-
-	if (node->Right != nullptr)
-	{
-		DeleteTree(node->Right);
-		node->Right = nullptr;
-	}
-
-	node->Parent = nullptr;
-	delete node;
 }
 
 long BinaryTree::Insert(int key, int value)
@@ -215,51 +176,20 @@ long BinaryTree::Find(int key, int & value)
 */
 long BinaryTree::Delete(int key)
 {
-	std::unique_ptr<Node> node(FindNode(key));
+	Node * node = FindNode(key);
 
 	if (node == nullptr)
 	{
 		return ERROR_NOT_FOUND;
 	}
 
-	// Move the left node to the left of the right node.
-	// This maintains order in the tree when the node is removed.
-	node->Right = InsertNodeToLeft(node->Right, node->Left);
-	node->Left = nullptr; // It's been moved
-
-	switch (node->ChildType())
+	if (node == Head)
 	{
-	case ChildType::Root:
-	{
-		Head = node->Right;
-		if (Head != nullptr)
-		{
-			Head->Parent = nullptr;
-			Head->UpdateDepthOfChildren();
-		}
-		break;
+		Head = node->Delete();
 	}
-
-	case ChildType::Left:
+	else
 	{
-		node->Parent->Left = node->Right;
-		if (node->Right != nullptr)
-		{
-			node->Right->Parent = node->Parent;
-		}
-		node->Parent->UpdateDepthOfChildren();
-		break;
-	}
-
-	case ChildType::Right:
-	{
-		node->Parent->Right = node->Right;
-		if (node->Right != nullptr)
-		{
-			node->Right->Parent = node->Parent;
-		}
-		node->Parent->UpdateDepthOfChildren();
-	}
+		node->Delete();
 	}
 
 	return ERROR_SUCCESS;

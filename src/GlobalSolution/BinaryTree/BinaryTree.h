@@ -13,13 +13,10 @@ public:
 	long Insert(int key, int value, bool & updated);
 	long Find(int key, int & value);
 	long Delete(int key);
-	void PrintInOrder();
 	void EvaluateInOrder(void(*f)(Node *));
 
 private:
 	Node * Head;
-	void EvaluateInOrder(void(*f)(Node *), Node * current);
 	Node * FindNode(int key);
 	Node * InsertNodeToLeft(Node * head, Node * node);
-	void DeleteTree(Node * head);
 };

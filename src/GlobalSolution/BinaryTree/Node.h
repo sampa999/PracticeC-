@@ -18,6 +18,10 @@ public:
 	ChildType ChildType();
 
 	void UpdateDepthOfChildren();
+	Node * Rebalance();
+	void EvaluateInOrder(void(*func)(Node *));
+	void DeleteTree();
+	Node * Delete();
 
 	int get_Key() { return Key; }
 	int get_Value() { return Value; }
