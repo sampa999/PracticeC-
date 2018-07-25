@@ -30,32 +30,27 @@ ChildType Node::ChildType()
 	return ChildType::Left;
 }
 
-void Node::UpdateDepthOfChildren()
+void UpdateDepthOfChildrenFunc(Node * node)
 {
 	int leftDepth = 0;
 	int rightDepth = 0;
 
-	if (Left != nullptr)
+	if (node->Left != nullptr)
 	{
-		leftDepth = Left->DepthOfChildren + 1;
+		leftDepth = node->Left->DepthOfChildren + 1;
 	}
 
-	if (Right != nullptr)
+	if (node->Right != nullptr)
 	{
-		rightDepth = Right->DepthOfChildren + 1;
+		rightDepth = node->Right->DepthOfChildren + 1;
 	}
 
-	int newDepth = std::max(leftDepth, rightDepth);
+	node->DepthOfChildren = std::max(leftDepth, rightDepth);
+}
 
-	if (newDepth != this->DepthOfChildren)
-	{
-		this->DepthOfChildren = newDepth;
-
-		if (Parent != nullptr)
-		{
-			Parent->UpdateDepthOfChildren();
-		}
-	}
+void Node::UpdateDepthOfChildren()
+{
+	EvaluatePostOrder(UpdateDepthOfChildrenFunc);
 }
 
 void Node::EvaluateInOrder(void(*func)(Node *))
@@ -70,6 +65,20 @@ void Node::EvaluateInOrder(void(*func)(Node *))
 	func(this);
 
 	Right->EvaluateInOrder(func);
+}
+
+void Node::EvaluatePostOrder(void(*func)(Node *))
+{
+	if (this == nullptr)
+	{
+		return;
+	}
+
+	Left->EvaluatePostOrder(func);
+
+	Right->EvaluatePostOrder(func);
+
+	func(this);
 }
 
 void Node::DeleteTree()
@@ -132,8 +141,6 @@ Node * Node::Delete()
 		{
 			Parent->Right = newRoot;
 		}
-
-		Parent->UpdateDepthOfChildren();
 	}
 
 	Parent = Left = Right = nullptr; // For safety
@@ -141,6 +148,30 @@ Node * Node::Delete()
 	delete this;
 
 	return newRoot;
+}
+
+bool Node::IsBalanced()
+{
+	int leftDepth = 0;
+	int rightDepth = 0;
+	bool leftBalanced = true;
+	bool rightBalanced = true;
+
+	UpdateDepthOfChildren();
+
+	if (Left != nullptr)
+	{
+		leftBalanced = Left->IsBalanced();
+		leftDepth = Left->DepthOfChildren + 1;
+	}
+
+	if (Right != nullptr)
+	{
+		rightBalanced = Right->IsBalanced();
+		rightDepth = Right->DepthOfChildren + 1;
+	}
+
+	return (rightBalanced && leftBalanced && std::abs(leftDepth - rightDepth) < 2);
 }
 
 /*
@@ -170,22 +201,34 @@ Node * Node::Rebalance()
 	int leftDepth = 0;
 	int rightDepth = 0;
 
+	UpdateDepthOfChildren();
+
 	if (Left != nullptr)
 	{
-		leftDepth = Left->DepthOfChildren;
+		if (!Left->IsBalanced())
+		{
+			Left = Left->Rebalance();
+			UpdateDepthOfChildren();
+		}
+		leftDepth = Left->DepthOfChildren + 1;
 	}
 
 	if (Right != nullptr)
 	{
-		rightDepth = Right->DepthOfChildren;
+		if (!Right->IsBalanced())
+		{
+			Right = Right->Rebalance();
+			UpdateDepthOfChildren();
+		}
+		rightDepth = Right->DepthOfChildren + 1;
 	}
 
 	if (leftDepth > rightDepth + 1)
 	{
 		Node * newRoot = this->Left;
-		this->Left = nullptr;
-
 		Node * current = newRoot;
+
+		this->Left = nullptr;
 
 		while (current->Right != nullptr)
 		{
@@ -193,11 +236,9 @@ Node * Node::Rebalance()
 		}
 
 		current->Right = this;
+		newRoot->Parent = this->Parent;
 		this->Parent = current;
-		current->UpdateDepthOfChildren();
 		
-		Node * parent = current->Parent;
-		parent->Right = current->Rebalance();
 		return newRoot;
 	}
 	else if (rightDepth > leftDepth + 1)
@@ -205,17 +246,19 @@ Node * Node::Rebalance()
 		Node * newRoot = this->Right;
 		Node * current = newRoot;
 
+		this->Right = nullptr;
+
 		while (current->Left != nullptr)
 		{
 			current = current->Left;
 		}
 
 		current->Left = this;
+		newRoot->Parent = this->Parent;
 		this->Parent = current;
-		current->UpdateDepthOfChildren();
 
-		Node * parent = current->Parent;
-		parent->Left = current->Rebalance();
 		return newRoot;
 	}
+
+	return this;
 }

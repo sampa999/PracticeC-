@@ -14,6 +14,8 @@ public:
 	long Find(int key, int & value);
 	long Delete(int key);
 	void EvaluateInOrder(void(*f)(Node *));
+	void UpdateDepthOfChildren();
+	void Rebalance();
 
 private:
 	Node * Head;

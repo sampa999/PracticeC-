@@ -25,6 +25,28 @@ void BinaryTree::EvaluateInOrder(void(*func)(Node *))
 	}
 }
 
+void BinaryTree::UpdateDepthOfChildren()
+{
+	if (Head != nullptr)
+	{
+		Head->UpdateDepthOfChildren();
+	}
+}
+
+void BinaryTree::Rebalance()
+{
+	if (Head != nullptr)
+	{
+		Head->UpdateDepthOfChildren();
+
+		while (!Head->IsBalanced())
+		{
+			Head = Head->Rebalance();
+			Head->UpdateDepthOfChildren();
+		}
+	}
+}
+
 Node * BinaryTree::FindNode(int key)
 {
 	Node * current = Head;
@@ -109,7 +131,6 @@ long BinaryTree::Insert(int key, int value, bool & updated)
 			{
 				node->Parent = current;
 				current->Left = node;
-				current->UpdateDepthOfChildren();
 				return ERROR_SUCCESS;
 			}
 			else
@@ -123,7 +144,6 @@ long BinaryTree::Insert(int key, int value, bool & updated)
 			{
 				node->Parent = current;
 				current->Right = node;
-				current->UpdateDepthOfChildren();
 				return ERROR_SUCCESS;
 			}
 			else

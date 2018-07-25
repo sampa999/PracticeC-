@@ -20,18 +20,19 @@ public:
 	void UpdateDepthOfChildren();
 	Node * Rebalance();
 	void EvaluateInOrder(void(*func)(Node *));
+	void EvaluatePostOrder(void(*func)(Node *));
 	void DeleteTree();
 	Node * Delete();
 
 	int get_Key() { return Key; }
 	int get_Value() { return Value; }
-	int get_DepthOfChildren() { return DepthOfChildren; }
+	bool IsBalanced();
+	Node * Left;
+	Node * Right;
+	int DepthOfChildren; // 0 means no children
 
 private:
 	Node * Parent;
-	Node * Left;
-	Node * Right;
 	int Key;
 	int Value;
-	int DepthOfChildren; // 0 means no children
 };

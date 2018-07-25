@@ -91,13 +91,14 @@ namespace BinaryTree_Tests
 			tree->Insert(10, 100);
 			tree->Insert(9, 99);
 			tree->Insert(11, 101);
+			tree->UpdateDepthOfChildren();
 
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Assert::AreEqual(3, nodeIndex);
-			Assert::AreEqual(0, nodeArray[0]->get_DepthOfChildren());
-			Assert::AreEqual(1, nodeArray[1]->get_DepthOfChildren());
-			Assert::AreEqual(0, nodeArray[2]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
 		}
 
 		TEST_METHOD(CheckDepthOfChildrenAfterOneSideDeleted)
@@ -110,12 +111,13 @@ namespace BinaryTree_Tests
 			tree->Insert(9, 99);
 			tree->Insert(11, 101);
 			tree->Delete(9);
+			tree->UpdateDepthOfChildren();
 
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Assert::AreEqual(2, nodeIndex);
-			Assert::AreEqual(1, nodeArray[0]->get_DepthOfChildren());
-			Assert::AreEqual(0, nodeArray[1]->get_DepthOfChildren());
+			Assert::AreEqual(1, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[1]->DepthOfChildren);
 		}
 
 		TEST_METHOD(CheckDepthOfChildrenAfterTwoSideDeleted)
@@ -133,7 +135,7 @@ namespace BinaryTree_Tests
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Assert::AreEqual(1, nodeIndex);
-			Assert::AreEqual(0, nodeArray[0]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
 		}
 
 		TEST_METHOD(DeleteFromEmptyTree)
@@ -214,24 +216,24 @@ namespace BinaryTree_Tests
 		{
 			Assert::AreEqual(15, nodeIndex);
 
-			Assert::AreEqual(0, nodeArray[0]->get_DepthOfChildren());
-			Assert::AreEqual(0, nodeArray[2]->get_DepthOfChildren());
-			Assert::AreEqual(0, nodeArray[4]->get_DepthOfChildren());
-			Assert::AreEqual(0, nodeArray[6]->get_DepthOfChildren());
-			Assert::AreEqual(0, nodeArray[8]->get_DepthOfChildren());
-			Assert::AreEqual(0, nodeArray[0xA]->get_DepthOfChildren());
-			Assert::AreEqual(0, nodeArray[0xC]->get_DepthOfChildren());
-			Assert::AreEqual(0, nodeArray[0xE]->get_DepthOfChildren());
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[4]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[6]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[8]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[0xA]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[0xC]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[0xE]->DepthOfChildren);
 
-			Assert::AreEqual(1, nodeArray[1]->get_DepthOfChildren());
-			Assert::AreEqual(1, nodeArray[5]->get_DepthOfChildren());
-			Assert::AreEqual(1, nodeArray[9]->get_DepthOfChildren());
-			Assert::AreEqual(1, nodeArray[0xD]->get_DepthOfChildren());
+			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[5]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[9]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[0xD]->DepthOfChildren);
 
-			Assert::AreEqual(2, nodeArray[3]->get_DepthOfChildren());
-			Assert::AreEqual(2, nodeArray[0xB]->get_DepthOfChildren());
+			Assert::AreEqual(2, nodeArray[3]->DepthOfChildren);
+			Assert::AreEqual(2, nodeArray[0xB]->DepthOfChildren);
 
-			Assert::AreEqual(3, nodeArray[7]->get_DepthOfChildren());
+			Assert::AreEqual(3, nodeArray[7]->DepthOfChildren);
 		}
 
 		/*
@@ -248,6 +250,12 @@ namespace BinaryTree_Tests
 
 			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 15));
 
+			tree->UpdateDepthOfChildren();
+
+			tree->Rebalance();
+
+			nodeIndex = 0;
+
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Verify15TreeIsCorrect();
@@ -255,7 +263,7 @@ namespace BinaryTree_Tests
 
 		/*
 		Insert in key order. i.e. 0123456789ABCDE
-		This insures it has to adjust the maximum number of times.
+		This insures it has to rebalance the maximum number of times.
                     7
               3           B
           1      5     9     D
@@ -267,6 +275,10 @@ namespace BinaryTree_Tests
 
 			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 15));
 
+			tree->UpdateDepthOfChildren();
+
+			nodeIndex = 0;
+
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Verify15TreeIsCorrect();
@@ -274,7 +286,7 @@ namespace BinaryTree_Tests
 
 		/*
 		Insert in reverse key order. i.e. EDCBA9876543210
-		This insures it has to adjust the maximum number of times.
+		This insures it has to rebalance the maximum number of times.
                     7
               3           B
           1      5     9     D
@@ -286,9 +298,169 @@ namespace BinaryTree_Tests
 
 			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 15));
 
+			tree->UpdateDepthOfChildren();
+
+			nodeIndex = 0;
+
 			tree->EvaluateInOrder(&EvalFunction);
 
 			Verify15TreeIsCorrect();
+		}
+
+		TEST_METHOD(RebalanceTreeWith3LeftNodes)
+		{
+			int nodeKeys[3] = { 3,2,1 };
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 3));
+
+			nodeIndex = 0;
+
+			tree->Rebalance();
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(3, nodeIndex);
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
+		}
+
+		TEST_METHOD(RebalanceTreeWith3RightNodes)
+		{
+			int nodeKeys[3] = { 1,2,3 };
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 3));
+
+			nodeIndex = 0;
+
+			tree->Rebalance();
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(3, nodeIndex);
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
+		}
+
+		TEST_METHOD(RebalanceTreeWith4LeftNodes)
+		{
+			int nodeKeys[4] = { 4,3,2,1 };
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 4));
+
+			nodeIndex = 0;
+
+			tree->Rebalance();
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(4, nodeIndex);
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(2, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[2]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[3]->DepthOfChildren);
+		}
+
+		TEST_METHOD(RebalanceTreeWith4RightNodes)
+		{
+			int nodeKeys[4] = { 1,2,3,4 };
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 4));
+
+			nodeIndex = 0;
+
+			tree->Rebalance();
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(4, nodeIndex);
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(2, nodeArray[2]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[3]->DepthOfChildren);
+		}
+
+		TEST_METHOD(RebalanceTreeWith5LeftNodes)
+		{
+			int nodeKeys[] = { 5,4,3,2,1 };
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 5));
+
+			nodeIndex = 0;
+
+			tree->Rebalance();
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(5, nodeIndex);
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(2, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[3]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[4]->DepthOfChildren);
+		}
+
+		TEST_METHOD(RebalanceTreeWith5RightNodes)
+		{
+			int nodeKeys[] = { 1,2,3,4,5};
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 5));
+
+			nodeIndex = 0;
+
+			tree->Rebalance();
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(5, nodeIndex);
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
+			Assert::AreEqual(2, nodeArray[3]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[4]->DepthOfChildren);
+		}
+
+		TEST_METHOD(RebalanceTreeWith6LeftNodes)
+		{
+			int nodeKeys[] = { 6,5,4,3,2,1 };
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 6));
+
+			nodeIndex = 0;
+
+			tree->Rebalance();
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(6, nodeIndex);
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(2, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[3]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[4]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[5]->DepthOfChildren);
+		}
+
+		TEST_METHOD(RebalanceTreeWith6RightNodes)
+		{
+			int nodeKeys[] = { 1,2,3,4,5,6 };
+
+			std::unique_ptr<BinaryTree> tree(CreateTree(nodeKeys, 6));
+
+			nodeIndex = 0;
+
+			tree->Rebalance();
+
+			tree->EvaluateInOrder(&EvalFunction);
+
+			Assert::AreEqual(6, nodeIndex);
+			Assert::AreEqual(0, nodeArray[0]->DepthOfChildren);
+			Assert::AreEqual(1, nodeArray[1]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[2]->DepthOfChildren);
+			Assert::AreEqual(2, nodeArray[3]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[4]->DepthOfChildren);
+			Assert::AreEqual(0, nodeArray[5]->DepthOfChildren);
 		}
 
 		TEST_METHOD(DeleteRightLeaf)
